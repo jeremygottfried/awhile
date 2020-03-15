@@ -13,6 +13,9 @@ module.exports = function awhile(condition, callback) {
     if (typeof condition === 'function' && !condition()) return;
     return new Promise(async (resolve) => {
       await callback(fBreak);
+      setTimeout(() => {
+        resolve();
+      }, 0);
     }).then(begin)
   }
 
