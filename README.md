@@ -121,7 +121,7 @@ loop1.begin();
 loop2.begin();
 ```
 
-# Background
+## Background
 
 ES6 Javascript introduced the promise and async/await paradigms. 
 
@@ -150,3 +150,11 @@ Promise.resolve()
 ```
 
 `awhile` takes advantage of the promise interface to create task loops that don't block the main thread.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+ISC(https://opensource.org/licenses/ISC)
