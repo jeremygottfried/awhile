@@ -121,6 +121,34 @@ loop1.begin();
 loop2.begin();
 ```
 
+## Under the hood
+
+awhile treats each callback as its own batch (chain) of microtasks. This differs from a for loop, which sometimes groups all `await` statements into a single batch (chain) of microtasks.
+
+For example:
+
+Using awhile:
+```js
+
+callback() {
+  promise1().
+  then(promise2)
+  .then(promise3)
+}
+
+new awhile(condition, callback).begin;
+```
+Each time awhile calls the callback, it creates a new microtask batch instead of grouping all callbacks into a single promise chain.
+
+A native JS `while` loop sometimes groups them. 
+These callbacks may be grouped into a single promise chain, potentially blocking the queue until all microtasks are complete. 
+```
+while(condition) {
+ await callback();
+}
+```
+
+
 ## Background
 
 ES6 Javascript introduced the promise and async/await paradigms. 
