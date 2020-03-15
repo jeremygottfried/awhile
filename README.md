@@ -1,4 +1,13 @@
+## Installation 
+
+`npm install @awhile/awhile`
+
+or
+
+`yarn add @awhile/awhile`
+
 # awhile
+
 awhile is a js library for running while loops that don't block the main thread. 
 
 Unlike `setInterval`, `awhile` resolves promises in order. If a task is asynchronous, the next task won't begin until the previous task resolves. `awhile` behaves similarly to a promise chain, except microtasks will be broken up task by task so that they don't block the queue.
@@ -37,14 +46,6 @@ Consider using `setInterval` for a synchronous task that needs to be looped cont
 ```js
 setInterval(task, 10)
 ```
-
-## Installation 
-
-`npm install @awhile/awhile`
-
-or
-
-`yarn add @awhile/awhile`
 
 ## Usage
 
