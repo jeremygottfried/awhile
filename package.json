@@ -1,0 +1,23 @@
+{
+  "name": "@awhile/awhile",
+  "version": "1.0.1",
+  "description": "Allows you to run  while loops concurrently and never block the main thread",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "concurrency",
+    "promise",
+    "event",
+    "while",
+    "for"
+  ],
+  "author": "Jeremy Gottfried",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.0"
+  },
+  "dependencies": {}
+}
