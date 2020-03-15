@@ -1,8 +1,12 @@
 {
   "name": "@awhile/awhile",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Allows you to run  while loops concurrently and never block the main thread",
   "main": "index.js",
+  "repository" : {
+    "type" : "git",
+    "url": "ssh://git@github.com:jeremygottfried/awhile.git"
+  },
   "scripts": {
     "test": "mocha"
   },
