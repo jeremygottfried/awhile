@@ -101,6 +101,10 @@ loop.break(); // will stop after the current task;
 
 In this case, `done` will not be logged until the entire loop is complete;
 ```js
+function callback() {
+  return somePromise;
+}
+
 (async function() {
   const loop = new awhile(condition, callback);
   
@@ -122,6 +126,38 @@ loop1.begin();
 loop2.begin();
 ```
 
+awhile is also great for building custom versions of common browser APIs.
+Here is a full example where I use `awhile` to build `setInterval`:
+
+```js
+var awhile = require("@awhile/awhile")
+
+function setInterval(callback, time) {
+
+  const timer = () => new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+      callback();
+    }, time);
+  })
+
+  const loop = new awhile(true, timer);
+  loop.begin();
+  return loop;
+}
+
+function clearInterval(loop) {
+  loop.break();
+}
+
+function callback() {
+  console.log('bro')
+}
+
+const interval = setInterval(callback, 1000);
+setTimeout(() => clearInterval(interval), 10000)
+```
+
 ## Under the hood
 
 awhile treats each callback as its own batch (chain) of microtasks. This differs from a for loop, which sometimes groups all `await` statements into a single batch (chain) of microtasks.
@@ -137,7 +173,7 @@ callback() {
   .then(promise3)
 }
 
-new awhile(condition, callback).begin;
+new awhile(condition, callback).begin();
 ```
 Each time awhile calls the callback, it creates a new microtask batch instead of grouping all callbacks into a single promise chain.
 
