@@ -1,0 +1,40 @@
+{
+  "name": "@awhile/array",
+  "version": "1.0.0",
+  "description": "asynchronous implementation of array prototype methods",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/jeremygottfried/awhile.git"
+  },
+  "keywords": [
+    "async",
+    "array",
+    "loop",
+    "iteration",
+    "concurrency",
+    "promise",
+    "event",
+    "map",
+    "foreach",
+    "reduce",
+    "every",
+    "filter"
+  ],
+  "author": "Jeremy Gottfried",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeremygottfried/awhile/issues"
+  },
+  "homepage": "https://github.com/jeremygottfried/awhile#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.0"
+  },
+  "dependencies": {
+    "@awhile/awhile": "^1.0.4"
+  }
+}
