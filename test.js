@@ -1,4 +1,4 @@
-const awhile = require('./index.js');
+const awhile = require('./index.js').default;
 var should = require('chai').should();
 var expect = require('chai').expect;
 
@@ -40,7 +40,7 @@ describe('awhile', function() {
       return index < arr.length
     }
     await new awhile(condition, callback).begin();
-    await new Promise((resolve) => setTimeout(() => resolve(), 1000))
+    await new Promise((resolve) => setTimeout(() => resolve(), 200))
     result.should.equal('abcd');
 
   })

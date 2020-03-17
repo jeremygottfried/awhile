@@ -1,6 +1,8 @@
 "use strict";
 
-module.exports = function awhile(condition, callback) {
+const createVirtualThread = require('./src/createVirtualThread');
+
+exports.default = function awhile(condition, callback) {
   if (condition !== true && typeof condition !== 'function') throw Error('condition must be true or a function')
   let _break = false;
 
@@ -8,19 +10,20 @@ module.exports = function awhile(condition, callback) {
     _break = true;
   }
 
-  function begin() {
-    if (_break) return;
-    if (typeof condition === 'function' && !condition()) return;
-    return new Promise(async (resolve) => {
-      await callback(fBreak);
-      setTimeout(() => {
-        resolve();
-      }, 0);
-    }).then(begin)
-  }
+  const loop = (function* () {
+    while(true) {
+      if (_break) break;
+      if (typeof condition === 'function' && !condition()) break;
+      yield callback(fBreak);
+    }
+  })()
+
+  const begin = createVirtualThread(loop);
 
   this.break = fBreak;
   this.begin = begin;
 
   return Object.freeze(this);
 }
+
+exports.createVirtualThread = createVirtualThread;
