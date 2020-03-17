@@ -96,8 +96,13 @@ describe('awhile', function() {
 
     let variable;
     let variable2 = '';
-    function callback() {}
+    async function callback() {
+      return 'foo'
+    }
+    function callback2() {}
     const loop = new awhile(true, callback)
+    const loop2 = new awhile(true, callback2)
+    loop2.begin();
     loop.begin();
     await new Promise((resolve) => {
       resolve();
@@ -113,5 +118,6 @@ describe('awhile', function() {
     variable.should.equal('test');
     variable2.should.equal('test');
     loop.break();
+    loop2.break();
   })
 })
