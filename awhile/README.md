@@ -1,16 +1,9 @@
-## Installation 
-
-`npm install @awhile/awhile`
-
-or
-
-`yarn add @awhile/awhile`
-
 # awhile
+[![npm version](https://img.shields.io/npm/v/@awhile/awhile.svg)](https://www.npmjs.org/package/@awhile/awhile)    
 
-awhile is a js library for running while loops that don't block the main thread. 
+awhile is a js library for running while loops that don't block the main thread. It can be used similarly to background threads that exist in other languages. 
 
-Unlike `setInterval`, `awhile` resolves promises in order. If a task is asynchronous, the next task won't begin until the previous task resolves. `awhile` behaves similarly to a promise chain, except microtasks will be broken up task by task so that they don't block the queue.
+Unlike `setInterval`, `awhile` resolves promises in order. If a task is asynchronous, the next task won't begin until the previous task resolves. In this way, you can use awhile like a virtual stack, and you can even use it to create a queuing system for task priority. `awhile` behaves similarly to a promise chain, except microtasks will be broken up task by task so that they don't block the queue.
 
 Unlike a normal `while` loop, `awhile` can run infinitely without blocking the main thread.
 
@@ -20,32 +13,13 @@ loop1.begin();
 loop2.begin();
 ```
 
-Before using awhile, consider using a built-in javascript API to handle async tasks in order. 
+## Installation 
 
-A `for` loop can be used inside an async function to create a promise chain.
+`npm install @awhile/awhile`
 
-```js
-async function chainWork() {
-  let workArray = [work1, work2, work3, work4]
-  
-  for (const work of workArray) {
-    await work();
-  }
-}
-```
+or
 
-Under the hood, this resolves to 
-```
-work1()
-.then(work2)
-.then(work3)
-.then(work4)
-```
-
-Consider using `setInterval` for a synchronous task that needs to be looped continuously.
-```js
-setInterval(task, 10)
-```
+`yarn add @awhile/awhile`
 
 ## Usage
 
@@ -185,6 +159,37 @@ while(condition) {
 }
 ```
 
+## Caveats
+`awhile` comes in handy when you want tasks to function like a background thread. For example, if you have an array of pending tasks that is frequently updated. If you want to automatically carry out those tasks in order, awhile is a great tool. 
+
+`awhile` can be used like a normal awhile loop, **but it will be considerably slower** for basic tasks like synchronously iterating through an array. For most looping tasks, the native while loop is better. 
+
+Before using awhile, consider using a built-in javascript API to handle async tasks in order. 
+
+A `for` loop can be used inside an async function to create a promise chain.
+
+```js
+async function chainWork() {
+  let workArray = [work1, work2, work3, work4]
+  
+  for (const work of workArray) {
+    await work();
+  }
+}
+```
+
+Under the hood, this resolves to 
+```
+work1()
+.then(work2)
+.then(work3)
+.then(work4)
+```
+
+Consider using `setInterval` for a synchronous task that needs to be looped continuously.
+```js
+setInterval(task, 10)
+```
 
 ## Background
 
