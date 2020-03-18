@@ -1,7 +1,7 @@
 # awhile
 [![npm version](https://img.shields.io/npm/v/@awhile/awhile.svg)](https://www.npmjs.org/package/@awhile/awhile)    
 
-awhile is a js library for running while loops that don't block the main thread. It can be used similarly to background threads that exist in other languages. 
+awhile is a js library for running while loops that don't block the main thread.
 
 Unlike `setInterval`, `awhile` resolves promises in order. If a task is asynchronous, the next task won't begin until the previous task resolves. In this way, you can use awhile like a virtual stack, and you can even use it to create a queuing system for task priority. `awhile` behaves similarly to a promise chain, except microtasks will be broken up task by task so that they don't block the queue.
 
@@ -13,7 +13,7 @@ loop1.begin();
 loop2.begin();
 ```
 
-## Installation 
+## Installation
 
 ```sh
 npm install @awhile/awhile
@@ -40,12 +40,12 @@ function condition() {
 function callback() {
   count += 1;
 }
-  
+
 const loop = new awhile(condition, callback);
 loop.begin();
 ```
 
-Note that a condition must be passed to `awhile` as a function, or as `true`. 
+Note that a condition must be passed to `awhile` as a function, or as `true`.
 ```js
 let count = 0;
 
@@ -63,7 +63,7 @@ setTimeout(() => shouldStop = true, 5000);
 
 function callback(_break) {
   if (shouldStop) return _break();
-  
+
   doWork();
 }
 ```
@@ -92,7 +92,7 @@ async function callback() {
 new awhile(true, callback).begin(true);
 ```
 
-`awhile` can also be treated as one big promise. 
+`awhile` can also be treated as one big promise.
 
 In this case, `done` will not be logged until the entire loop is complete;
 ```js
@@ -102,7 +102,7 @@ function callback() {
 
 (async function() {
   const loop = new awhile(condition, callback);
-  
+
   await loop.begin();
 
   console.log('done')
@@ -172,8 +172,8 @@ new awhile(condition, callback).begin();
 ```
 Each time awhile calls the callback, it creates a new microtask batch instead of grouping all callbacks into a single promise chain.
 
-A native JS `while` loop sometimes groups them. 
-These callbacks may be grouped into a single promise chain, potentially blocking the queue until all microtasks are complete. 
+A native JS `while` loop sometimes groups them.
+These callbacks may be grouped into a single promise chain, potentially blocking the queue until all microtasks are complete.
 ```
 while(condition) {
  await callback();
@@ -181,25 +181,25 @@ while(condition) {
 ```
 
 ## Caveats
-`awhile` comes in handy when you want tasks to function like a background thread. For example, if you have an array of pending tasks that is frequently updated. If you want to automatically carry out those tasks in order, awhile is a great tool. 
+`awhile` comes in handy when you want tasks to function like a background thread. For example, if you have an array of pending tasks that is frequently updated. If you want to automatically carry out those tasks in order, awhile is a great tool.
 
-`awhile` can be used like a normal awhile loop, **but it will be considerably slower** for basic tasks like synchronously iterating through an array. For most looping tasks, the native while loop is better. 
+`awhile` can be used like a normal awhile loop, **but it will be considerably slower** for basic tasks like synchronously iterating through an array. For most looping tasks, the native while loop is better.
 
-Before using awhile, consider using a built-in javascript API to handle async tasks in order. 
+Before using awhile, consider using a built-in javascript API to handle async tasks in order.
 
 A `for` loop can be used inside an async function to create a promise chain.
 
 ```js
 async function chainWork() {
   let workArray = [work1, work2, work3, work4]
-  
+
   for (const work of workArray) {
     await work();
   }
 }
 ```
 
-Under the hood, this resolves to 
+Under the hood, this resolves to
 ```
 work1()
 .then(work2)
@@ -214,7 +214,7 @@ setInterval(task, 10)
 
 ## Background
 
-ES6 Javascript introduced the promise and async/await paradigms. 
+ES6 Javascript introduced the promise and async/await paradigms.
 
 Promise is an API for interacting with asynchronous tasks.
 Promises wrap an asynchronous task in a helpful interface that handles resolution and rejection.
@@ -229,10 +229,10 @@ promise.then((json) => {
 ```
 
 Promises also introduced the concept of micro and macro tasks.
-Micro-tasks are given precedence in the queue, because they are often time sensitive. 
-Promise callbacks are treated as micro tasks. A chain of promises may be batched together, all occurring before the next macro task. 
+Micro-tasks are given precedence in the queue, because they are often time sensitive.
+Promise callbacks are treated as micro tasks. A chain of promises may be batched together, all occurring before the next macro task.
 
-For example: 
+For example:
 ```js
 Promise.resolve()
 .then(work1)
