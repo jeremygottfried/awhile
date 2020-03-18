@@ -15,11 +15,15 @@ loop2.begin();
 
 ## Installation 
 
-`npm install @awhile/awhile`
+```sh
+npm install @awhile/awhile
+```
 
 or
 
-`yarn add @awhile/awhile`
+```sh
+yarn add @awhile/awhile
+```
 
 ## Usage
 
@@ -69,6 +73,23 @@ You can also call break outside the loop:
 const loop = new awhile(condition, callback);
 loop.begin();
 loop.break(); // will stop after the current task;
+```
+
+If you want the browser to use its default batching mechanism for promises, you can pass `true` to the `begin` function.
+This option will improve performance in some cases. It will behave slightly differently, because now some groups of promises will be batched.
+```js
+const loop = new awhile(condition, callback);
+
+loop.begin(true)
+```
+
+The case where this option will cause issues is if you run an infinite loop, but your callback is not actually doing any async behavior. This example will block the main thread indefinitely:
+```js
+async function callback() {
+  return "bar"
+}
+
+new awhile(true, callback).begin(true);
 ```
 
 `awhile` can also be treated as one big promise. 
@@ -134,7 +155,7 @@ setTimeout(() => clearInterval(interval), 10000)
 
 ## Under the hood
 
-awhile treats each callback as its own batch (chain) of microtasks. This differs from a for loop, which sometimes groups all `await` statements into a single batch (chain) of microtasks.
+By default, `awhile` treats each callback as its own batch (chain) of microtasks. This differs from a for loop, which sometimes groups all `await` statements into a single batch (chain) of microtasks.
 
 For example:
 
