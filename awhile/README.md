@@ -15,11 +15,15 @@ loop2.begin();
 
 ## Installation 
 
-`npm install @awhile/awhile`
+```sh
+npm install @awhile/awhile
+```
 
 or
 
-`yarn add @awhile/awhile`
+```sh
+yarn add @awhile/awhile
+```
 
 ## Usage
 
