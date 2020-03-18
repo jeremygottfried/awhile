@@ -1,6 +1,7 @@
 const awhile = require('./index.js').default;
-var should = require('chai').should();
-var expect = require('chai').expect;
+const should = require('chai').should();
+const expect = require('chai').expect;
+const fetch = require("node-fetch");
 
 describe('awhile', function() {
   it('should continue loop until a condition is met', async function() {
@@ -11,13 +12,16 @@ describe('awhile', function() {
     function condition() {
       return count < 5;
     }
-    await new awhile(condition, callback).begin();
+    await new awhile(condition, callback).begin(true);
+    count.should.equal(5);
+    count = 0;
+    await new awhile(condition, callback).begin()
     count.should.equal(5);
   })
 
   it('should carry out asynchronous tasks in order', async function() {
-    let index = 0
-    let result = ''
+    let index = 0;
+    let result = '';
     function resolveStr(str, time) {
       return new Promise(resolve => setTimeout(() => resolve(str), time))
     }
@@ -39,10 +43,12 @@ describe('awhile', function() {
     function condition() {
       return index < arr.length
     }
-    await new awhile(condition, callback).begin();
-    await new Promise((resolve) => setTimeout(() => resolve(), 200))
+    await new awhile(condition, callback).begin(true);
     result.should.equal('abcd');
-
+    index = 0;
+    result = '';
+    await new awhile(condition, callback).begin();
+    result.should.equal('abcd');
   })
 
   it('should break if break function is called inside callback', async function() {
@@ -61,8 +67,11 @@ describe('awhile', function() {
     }
 
     await new awhile(condition, callback).begin();
-    clearTimeout(timeout);
     count.should.equal(10)
+    count = 0;
+    await new awhile(condition, callback).begin(true);
+    count.should.equal(10)
+    clearTimeout(timeout);
   })
 
   it('should break if break function is called outside callback', async function() {
@@ -85,11 +94,36 @@ describe('awhile', function() {
     const interval = setInterval(() => {
       if (count > 5) loop.break();
     }, 1)
-
     await loop.begin();
-    clearTimeout(timeout);
-    clearInterval(interval);
     expect(count).to.be.above(5)
+    clearInterval(interval);
+
+    count = 0;
+    const loop2 = new awhile(condition, callback);
+    const interval2 = setInterval(() => {
+      if (count > 5) loop2.break();
+    }, 1)
+    clearInterval(interval2);
+    clearTimeout(timeout);
+  })
+  it('should mostly not block the main thread if true is passed to begin function', async function() {
+    let variable;
+
+    async function callback() {
+       const res = await fetch('http://google.com')
+       return 'test';
+    }
+
+    const loop = new awhile(true, callback);
+    loop.begin(true);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        variable = 'test';
+        resolve();
+      }, 0)
+    })
+    variable.should.equal('test');
+    loop.break();
   })
 
   it('should not block main thread', async function() {
