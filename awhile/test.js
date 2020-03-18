@@ -1,6 +1,7 @@
 const awhile = require('./index.js').default;
-var should = require('chai').should();
-var expect = require('chai').expect;
+const should = require('chai').should();
+const expect = require('chai').expect;
+const fetch = require("node-fetch");
 
 describe('awhile', function() {
   it('should continue loop until a condition is met', async function() {
@@ -109,7 +110,7 @@ describe('awhile', function() {
     let variable;
 
     async function callback() {
-       await new Promise(resolve => setTimeout(() => resolve()))
+       const res = await fetch('http://google.com')
        return 'test';
     }
 
